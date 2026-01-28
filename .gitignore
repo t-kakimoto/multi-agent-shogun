@@ -25,3 +25,7 @@ queue/reports/
 
 # Memory MCP data (local to each installation)
 memory/
+
+# Local config overrides (environment-specific, not tracked)
+config/settings.local.yaml
+config/projects.local.yaml
