@@ -18,8 +18,14 @@ skill:
 screenshot:
   # Windows側パス（参考用）
   windows_path: "C:\\Users\\{{USERNAME}}\\Pictures\\Screenshots"
-  # WSL側パス（実際に使用）
-  path: "/mnt/c/Users/{{USERNAME}}/Pictures/Screenshots"
+  # WSL側パス（WSL環境で使用）
+  wsl_path: "/mnt/c/Users/{{USERNAME}}/Pictures/Screenshots"
+  # macOS側パス（macOS環境で使用）
+  mac_path: "~/Desktop"
+  # 実際に使用するパス（環境に合わせて設定）
+  # WSL: /mnt/c/Users/{{USERNAME}}/Pictures/Screenshots
+  # macOS: ~/Desktop
+  path: "~/Desktop"
 
 # ログ設定
 logging:
