@@ -106,8 +106,76 @@ cd /mnt/c/tools/multi-agent-shogun
 
 ---
 
+### 🍎 macOS Users
+
+<table>
+<tr>
+<td width="60">
+
+**Step 1**
+
+</td>
+<td>
+
+📥 **Clone the repository**
+
+```bash
+git clone https://github.com/yohey-w/multi-agent-shogun.git ~/multi-agent-shogun
+cd ~/multi-agent-shogun
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+**Step 2**
+
+</td>
+<td>
+
+🍺 **Run the setup script**
+
+```bash
+chmod +x *.sh
+./first_setup.sh
+```
+
+This will check/install tmux and Node.js via Homebrew.
+
+</td>
+</tr>
+<tr>
+<td>
+
+**Step 3**
+
+</td>
+<td>
+
+✅ **Done!** Start the system:
+
+```bash
+./shutsujin_departure.sh
+```
+
+</td>
+</tr>
+</table>
+
+> **Note:** Homebrew is required. Install from https://brew.sh if needed.
+
+#### 📅 Daily Startup (After First Install)
+
+```bash
+cd ~/multi-agent-shogun
+./shutsujin_departure.sh
+```
+
+---
+
 <details>
-<summary>🐧 <b>Linux / Mac Users</b> (Click to expand)</summary>
+<summary>🐧 <b>Linux Users</b> (Click to expand)</summary>
 
 ### First-Time Setup
 
@@ -194,8 +262,9 @@ If you prefer to install dependencies manually:
 | Requirement | How to install | Notes |
 |-------------|----------------|-------|
 | WSL2 + Ubuntu | `wsl --install` in PowerShell | Windows only |
-| tmux | `sudo apt install tmux` | Terminal multiplexer |
-| Node.js v20+ | `nvm install 20` | Required for Claude Code CLI |
+| Homebrew | https://brew.sh | macOS only |
+| tmux | `sudo apt install tmux` (Linux/WSL)<br>`brew install tmux` (macOS) | Terminal multiplexer |
+| Node.js v20+ | `nvm install 20` (Linux/WSL)<br>`brew install node@20` (macOS) | Required for Claude Code CLI |
 | Claude Code CLI | `npm install -g @anthropic-ai/claude-code` | Anthropic's official CLI |
 
 </details>
@@ -557,7 +626,9 @@ language: en   # Japanese + English translation
 ./shutsujin_departure.sh -s
 ./shutsujin_departure.sh --setup-only
 
-# Full startup + open Windows Terminal tabs
+# Full startup + open terminal windows
+# - macOS: Opens new Terminal.app windows
+# - Windows/WSL: Opens Windows Terminal tabs
 ./shutsujin_departure.sh -t
 ./shutsujin_departure.sh --terminal
 

@@ -106,8 +106,76 @@ cd /mnt/c/tools/multi-agent-shogun
 
 ---
 
+### 🍎 macOS ユーザー
+
+<table>
+<tr>
+<td width="60">
+
+**Step 1**
+
+</td>
+<td>
+
+📥 **リポジトリをクローン**
+
+```bash
+git clone https://github.com/yohey-w/multi-agent-shogun.git ~/multi-agent-shogun
+cd ~/multi-agent-shogun
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+**Step 2**
+
+</td>
+<td>
+
+🍺 **セットアップスクリプトを実行**
+
+```bash
+chmod +x *.sh
+./first_setup.sh
+```
+
+Homebrew経由でtmuxとNode.jsをチェック/インストールします。
+
+</td>
+</tr>
+<tr>
+<td>
+
+**Step 3**
+
+</td>
+<td>
+
+✅ **完了！** システムを起動:
+
+```bash
+./shutsujin_departure.sh
+```
+
+</td>
+</tr>
+</table>
+
+> **注意:** Homebrewが必要です。未インストールの場合は https://brew.sh からインストールしてください。
+
+#### 📅 毎日の起動（初回インストール後）
+
+```bash
+cd ~/multi-agent-shogun
+./shutsujin_departure.sh
+```
+
+---
+
 <details>
-<summary>🐧 <b>Linux / Mac ユーザー</b>（クリックで展開）</summary>
+<summary>🐧 <b>Linux ユーザー</b>（クリックで展開）</summary>
 
 ### 初回セットアップ
 
@@ -194,8 +262,9 @@ wsl --install
 | 要件 | インストール方法 | 備考 |
 |------|-----------------|------|
 | WSL2 + Ubuntu | PowerShellで `wsl --install` | Windowsのみ |
-| tmux | `sudo apt install tmux` | ターミナルマルチプレクサ |
-| Node.js v20+ | `nvm install 20` | Claude Code CLIに必要 |
+| Homebrew | https://brew.sh | macOSのみ |
+| tmux | `sudo apt install tmux` (Linux/WSL)<br>`brew install tmux` (macOS) | ターミナルマルチプレクサ |
+| Node.js v20+ | `nvm install 20` (Linux/WSL)<br>`brew install node@20` (macOS) | Claude Code CLIに必要 |
 | Claude Code CLI | `npm install -g @anthropic-ai/claude-code` | Anthropic公式CLI |
 
 </details>
@@ -563,7 +632,9 @@ language: en   # 日本語 + 英訳併記
 ./shutsujin_departure.sh -s
 ./shutsujin_departure.sh --setup-only
 
-# フル起動 + Windows Terminalタブを開く
+# フル起動 + ターミナルウィンドウを開く
+# - macOS: Terminal.appで新規ウィンドウを開く
+# - Windows/WSL: Windows Terminalでタブを開く
 ./shutsujin_departure.sh -t
 ./shutsujin_departure.sh --terminal
 
