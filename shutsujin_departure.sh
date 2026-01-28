@@ -65,7 +65,11 @@ while [[ $# -gt 0 ]]; do
             echo "  ./shutsujin_departure.sh -t   # 全エージェント起動 + ターミナルタブ展開"
             echo ""
             echo "エイリアス:"
-            echo "  csst  → cd /mnt/c/tools/multi-agent-shogun && ./shutsujin_departure.sh"
+            if [ "$(uname -s)" = "Darwin" ]; then
+                echo "  csst  → cd ~/multi-agent-shogun && ./shutsujin_departure.sh"
+            else
+                echo "  csst  → cd /mnt/c/tools/multi-agent-shogun && ./shutsujin_departure.sh"
+            fi
             echo "  css   → tmux attach-session -t shogun"
             echo "  csm   → tmux attach-session -t multiagent"
             echo ""
@@ -529,17 +533,20 @@ echo "  ════════════════════════
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 8: Windows Terminal でタブを開く（-t オプション時のみ）
+# STEP 8: ターミナルでタブ/ウィンドウを開く（-t オプション時のみ）
 # ═══════════════════════════════════════════════════════════════════════════════
 if [ "$OPEN_TERMINAL" = true ]; then
-    log_info "📺 Windows Terminal でタブを展開中..."
-
-    # Windows Terminal が利用可能か確認
-    if command -v wt.exe &> /dev/null; then
+    if [ "$(uname -s)" = "Darwin" ]; then
+        log_info "📺 macOS Terminal でウィンドウを展開中..."
+        osascript -e 'tell application "Terminal" to do script "tmux attach-session -t shogun"'
+        osascript -e 'tell application "Terminal" to do script "tmux attach-session -t multiagent"'
+        log_success "  └─ ターミナルウィンドウ展開完了"
+    elif command -v wt.exe &> /dev/null; then
+        log_info "📺 Windows Terminal でタブを展開中..."
         wt.exe -w 0 new-tab wsl.exe -e bash -c "tmux attach-session -t shogun" \; new-tab wsl.exe -e bash -c "tmux attach-session -t multiagent"
         log_success "  └─ ターミナルタブ展開完了"
     else
-        log_info "  └─ wt.exe が見つかりません。手動でアタッチしてください。"
+        log_info "  └─ 対応するターミナルが見つかりません。手動でアタッチしてください。"
     fi
     echo ""
 fi

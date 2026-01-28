@@ -51,7 +51,7 @@ HAS_ERROR=false
 echo ""
 echo "  ╔══════════════════════════════════════════════════════════════╗"
 echo "  ║  🏯 multi-agent-shogun インストーラー                         ║"
-echo "  ║     Initial Setup Script for Ubuntu / WSL                    ║"
+echo "  ║     Initial Setup Script for Ubuntu / WSL / macOS            ║"
 echo "  ╚══════════════════════════════════════════════════════════════╝"
 echo ""
 echo "  このスクリプトは初回セットアップ用です。"
@@ -64,23 +64,31 @@ echo ""
 log_step "STEP 1: システム環境チェック"
 
 # OS情報を取得
-if [ -f /etc/os-release ]; then
+OS_TYPE="$(uname -s)"
+IS_WSL=false
+IS_MACOS=false
+
+if [ "$OS_TYPE" = "Darwin" ]; then
+    IS_MACOS=true
+    OS_NAME="macOS"
+    OS_VERSION="$(sw_vers -productVersion 2>/dev/null || echo 'unknown')"
+    log_info "OS: $OS_NAME $OS_VERSION"
+    log_info "環境: macOS"
+elif [ -f /etc/os-release ]; then
     . /etc/os-release
     OS_NAME=$NAME
     OS_VERSION=$VERSION_ID
     log_info "OS: $OS_NAME $OS_VERSION"
+    # WSL チェック
+    if grep -qi microsoft /proc/version 2>/dev/null; then
+        log_info "環境: WSL (Windows Subsystem for Linux)"
+        IS_WSL=true
+    else
+        log_info "環境: Native Linux"
+    fi
 else
     OS_NAME="Unknown"
     log_warn "OS情報を取得できませんでした"
-fi
-
-# WSL チェック
-if grep -qi microsoft /proc/version 2>/dev/null; then
-    log_info "環境: WSL (Windows Subsystem for Linux)"
-    IS_WSL=true
-else
-    log_info "環境: Native Linux"
-    IS_WSL=false
 fi
 
 RESULTS+=("システム環境: OK")
@@ -121,13 +129,38 @@ else
             RESULTS+=("tmux: 未インストール (スキップ)")
             HAS_ERROR=true
         fi
+    elif [ "$IS_MACOS" = true ] && command -v brew &> /dev/null; then
+        read -p "  tmux をインストールしますか? (brew install tmux) [Y/n]: " REPLY
+        REPLY=${REPLY:-Y}
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            log_info "tmux をインストール中 (Homebrew)..."
+            brew install tmux
+
+            if command -v tmux &> /dev/null; then
+                TMUX_VERSION=$(tmux -V | awk '{print $2}')
+                log_success "tmux インストール完了 (v$TMUX_VERSION)"
+                RESULTS+=("tmux: インストール完了 (v$TMUX_VERSION)")
+            else
+                log_error "tmux のインストールに失敗しました"
+                RESULTS+=("tmux: インストール失敗")
+                HAS_ERROR=true
+            fi
+        else
+            log_warn "tmux のインストールをスキップしました"
+            RESULTS+=("tmux: 未インストール (スキップ)")
+            HAS_ERROR=true
+        fi
     else
-        log_error "apt-get が見つかりません。手動で tmux をインストールしてください"
+        log_error "パッケージマネージャが見つかりません。手動で tmux をインストールしてください"
         echo ""
         echo "  インストール方法:"
         echo "    Ubuntu/Debian: sudo apt-get install tmux"
         echo "    Fedora:        sudo dnf install tmux"
         echo "    macOS:         brew install tmux"
+        if [ "$IS_MACOS" = true ]; then
+            echo ""
+            echo "  Homebrew がない場合: https://brew.sh"
+        fi
         RESULTS+=("tmux: 未インストール (手動インストール必要)")
         HAS_ERROR=true
     fi
@@ -162,9 +195,13 @@ else
     echo "     nvm install 20"
     echo "     nvm use 20"
     echo ""
-    echo "  または、直接インストール（Ubuntu）:"
-    echo "     curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -"
-    echo "     sudo apt-get install -y nodejs"
+    echo "  または、直接インストール:"
+    if [ "$IS_MACOS" = true ]; then
+        echo "     brew install node@20"
+    else
+        echo "     curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -"
+        echo "     sudo apt-get install -y nodejs"
+    fi
     echo ""
     RESULTS+=("Node.js: 未インストール")
     HAS_ERROR=true
