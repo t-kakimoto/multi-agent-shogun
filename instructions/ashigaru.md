@@ -199,7 +199,7 @@ status: done  # done | failed | blocked
 result:
   summary: "WBS 2.3節 完了でござる"
   files_modified:
-    - "/mnt/c/TS/docs/outputs/WBS_v2.md"
+    - "docs/outputs/WBS_v2.md"
   notes: "担当者3名、期間を2/1-2/15に設定"
 # ═══════════════════════════════════════════════════════════════
 # 【必須】スキル化候補の検討（毎回必ず記入せよ！）

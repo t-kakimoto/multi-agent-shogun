@@ -220,7 +220,7 @@ task:
   task_id: subtask_001
   parent_cmd: cmd_001
   description: "hello1.mdを作成し、「おはよう1」と記載せよ"
-  target_path: "/mnt/c/tools/multi-agent-shogun/hello1.md"
+  target_path: "hello1.md"
   status: assigned
   timestamp: "2026-01-25T12:00:00"
 ```
